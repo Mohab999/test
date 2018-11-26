@@ -353,23 +353,22 @@ client.user.setGame(`Marley`,"http://twitch.tv/Death Shop")
 client.user.setStatus("dnd")
 });
 client.on('message', message => {
- var prefix = "*"
-    if(message.content.startsWith(prefix + 'new')) {
+    if(message.content.startsWith('$new')) {
         let args = message.content.split(' ').slice(1).join(' ');
         let support = message.guild.roles.find("name","Support Team");
         let ticketsStation = message.guild.channels.find("name", "TICKETS");
         if(!args) {
-            return message.channel.send('الرجاء كتابة سبب التذكرة');
+            return message.channel.send('**( $new <السبب> )**');
         };
                 if(!support) {
                     return message.channel.send('**Please make sure that `Support Team` role exists and it\'s not duplicated.**');
                 };
             if(!ticketsStation) {
-                message.guild.createChannel("Ticket", "category");
+                message.guild.createChannel("TICKETS", "category");
             };
-                message.guild.createChannel(`𝑻𝑰𝑪𝑲𝑬𝑻`, "text").then(ticket => {
+                message.guild.createChannel(`ticket-${message.author.username}`, "text").then(ticket => {
                     message.delete()
-                        message.channel.send(`تم انشاء تذكرتك. [ ${ticket} ]`);
+                        message.channel.send(`Your ticket has been created. [ ${ticket} ]`);
                     ticket.setParent(ticketsStation);
                     ticketsStation.setPosition(1);
                         ticket.overwritePermissions(message.guild.id, {
@@ -385,29 +384,29 @@ client.on('message', message => {
                                     READ_MESSAGES: true
                                 });
                     let embed = new Discord.RichEmbed()
-                                .setTitle('**تذكرة جديدة.**')
-                                .setColor("RANDOM")
+                                .setTitle('**New Ticket.**')
+                                .setColor("PURPLE")
                                 .setThumbnail(`${message.author.avatarURL}`)
-                                .addField('سبب التذكرة', args)
-                                .addField('صاحب التذكرة', message.author)
-                                .addField('الروم', `<#${message.channel.id}>`);
-
+                                .addField('**SUBJECT**', args)
+                                .addField('**CREATED BY**', message.author)
+                                .addField('**FROM**', `<#${message.channel.id}>`);
+ 
                                 ticket.sendEmbed(embed);
                 }) .catch();
     }
-    if(message.content.startsWith(prefix + 'close')) {
+    if(message.content.startsWith('$close')) {
             if(!message.member.hasPermission("ADMINISTRATOR")) return;
-        if(!message.channel.name.startsWith("𝑻𝑰𝑪𝑲𝑬𝑻")) {
+        if(!message.channel.name.startsWith("ticket")) {
             return;
         };  
                 let embed = new Discord.RichEmbed()
-                    .setAuthor("هل تريد فعلآ اغلاق التذكرة ؟.")
-                    .setColor("RANDOM");
+                    .setAuthor("**هل انت متاكد من اغلاق هذه التذكر ؟! .. اذا كنت متاكد اكتب الامر مرة اخرى**")
+                    .setColor("PURPLE");
                     message.channel.sendEmbed(embed) .then(codes => {
-
-                    
-                        const filter = msg => msg.content.startsWith(prefix + 'close');
-                        message.channel.awaitMessages(response => response.content === prefix + 'close', {
+ 
+                   
+                        const filter = msg => msg.content.startsWith('$close');
+                        message.channel.awaitMessages(response => response.content === '$close', {
                             max: 1,
                             time: 20000,
                             errors: ['time']
@@ -416,18 +415,18 @@ client.on('message', message => {
                             message.channel.delete();
                         }) .catch(() => {
                             codes.delete()
-                                .then(message.channel.send('**Operation has been cancelled.**')) .then((c) => {
+                                .then(message.channel.send('**تم الاغلاق بنجاح .**')) .then((c) => {
                                     c.delete(4000);
                                 })
-                                    
-                            
+                                   
+                           
                         })
-
-
+ 
+ 
                     })
-
-
-            
+ 
+ 
+           
     }
 });
 

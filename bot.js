@@ -20,7 +20,7 @@ const gif = require("gif-search");
 
 const client = new Discord.Client({disableEveryone: true});
 
-const prefix = "+";
+const prefix = "------------";
 /////////////////////////
 ////////////////////////
 
@@ -353,7 +353,7 @@ client.user.setGame(`+play | pro wolf music`,"http://twitch.tv/Death Shop")
 client.user.setStatus("dnd")
 });
 client.on('message', message => {
- var prefix = "$"
+ var prefix = "*"
     if(message.content.startsWith(prefix + 'new')) {
         let args = message.content.split(' ').slice(1).join(' ');
         let support = message.guild.roles.find("name","Support Team");
